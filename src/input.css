@@ -1,23 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   html { scroll-padding-top: 72px; }
   :focus-visible { outline: 3px solid #e5333d; outline-offset: 3px; }
 }
- 
+
 @layer components {
-  .h2 { @apply font-head font-black uppercase leading-[.95] text-[clamp(2.4rem,6vw,3.8rem)] mb-2; }
-  .h3 { @apply font-head font-extrabold uppercase leading-none text-[1.6rem]; }
- 
+  .h2 { @apply font-head font-black uppercase leading-[.95] text-[clamp(2.1rem,6vw,3.8rem)] mb-2; }
+  .h3 { @apply font-head font-extrabold uppercase leading-none text-[1.5rem] md:text-[1.6rem]; }
+
   .btn { @apply inline-block px-6 py-3.5 font-semibold text-white bg-brand border-2 border-brand transition hover:bg-brand-hi hover:border-brand-hi active:translate-y-px; }
   .btn-ghost { @apply bg-transparent border-line hover:bg-transparent hover:border-paper; }
- 
+
   .lead { @apply text-mute max-w-[52ch]; }
- 
+
   .list-row { @apply py-2.5 border-t border-line; }
   .list-row::before { content: ""; @apply inline-block w-2 h-2 bg-brand-hi mr-3; }
- 
+
   .field { @apply block w-full bg-char border border-line text-paper px-4 py-3 placeholder:text-mute/70 focus:border-brand-hi focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-hi; }
 }
