@@ -31,21 +31,28 @@
 
   <!-- Hero -->
   <section class="pt-14 pb-[72px] bg-[radial-gradient(900px_400px_at_85%_0,rgba(200,32,42,.22),transparent_60%)]">
-    <div class="max-w-[1120px] mx-auto px-5 grid gap-12 items-center md:grid-cols-[1.05fr_.95fr]">
+    <div class="max-w-[1120px] mx-auto px-5 grid gap-12 items-center md:grid-cols-[.95fr_1.05fr]">
       <div>
-        <h1 class="motion-safe:animate-rise font-head font-black uppercase leading-[.95] text-[clamp(3.6rem,10.5vw,7.6rem)] mb-6">
+        <h1 class="motion-safe:animate-rise font-head font-black uppercase leading-[.95] text-[clamp(3.4rem,9vw,6rem)] mb-6">
           Lift heavy.
           <span class="block text-brand-hi">Stay consistent.</span>
         </h1>
         <p class="text-mute text-[1.15rem] max-w-[44ch] mb-8">A no-frills neighborhood gym in Lawaan 1, Talisay. Real equipment, real coaching, and rates that make showing up every day easy.</p>
         <div class="flex flex-wrap gap-3">
-          <a href="#contact" class="btn">Book a free assesment</a>
+          <a href="#contact" class="btn">Book a free assessment</a>
           <a href="#pricing" class="btn btn-ghost">See pricing</a>
         </div>
       </div>
       <div class="relative">
-        <img src="images/gym.jpg" alt="Inside ZNZ Fitness Gym: squat rack, adjustable benches and weight plates on rubber flooring" width="900" height="1200"
-             class="w-full aspect-[4/3] md:aspect-[4/5] object-cover object-[center_60%] border border-line">
+        <video id="hero-video" class="w-full aspect-video object-cover border border-line bg-char" src="public/loop.mp4" poster="public/gym.jpg" loop playsinline preload="auto" aria-label="ZNZ Fitness Gym video"></video>
+        <button id="hero-sound" type="button" aria-pressed="true" class="absolute bottom-3 right-3 z-10 inline-flex items-center gap-2 bg-ink/80 backdrop-blur border border-line px-4 py-2 text-[.95rem] font-medium hover:border-paper cursor-pointer">
+          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 3 9 3 15 6 15 11 19 11 5" fill="currentColor"/>
+            <g id="hero-waves"><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></g>
+            <g id="hero-cross" style="display:none"><line x1="16" y1="9" x2="22" y2="15"/><line x1="22" y1="9" x2="16" y2="15"/></g>
+          </svg>
+          <span id="hero-label">Mute</span>
+        </button>
         <div aria-hidden="true" class="absolute -right-3.5 -bottom-3.5 w-3/5 h-3/5 border-r-8 border-b-8 border-brand -z-10"></div>
       </div>
     </div>
@@ -105,14 +112,14 @@
           <li class="list-row">Punching bag</li>
         </ul>
       </div>
-      <img src="images/logo.jpg" alt="ZNZ Fitness Gym logo: a barbell with two red Z letters and a man and woman holding dumbbells" width="600" height="600" loading="lazy" class="w-full border border-line">
+      <img src="public/logo.jpg" alt="ZNZ Fitness Gym logo: a barbell with two red Z letters and a man and woman holding dumbbells" width="600" height="600" loading="lazy" class="w-full border border-line">
     </div>
   </section>
 
   <!-- Supplements -->
   <section id="shop" class="py-[88px] bg-char">
     <div class="max-w-[1120px] mx-auto px-5 grid gap-12 items-center md:grid-cols-2">
-      <img src="images/supplements.jpg" alt="Glass cabinet of whey protein, creatine and amino supplements" width="700" height="933" loading="lazy" class="w-full aspect-[3/4] object-cover object-top border border-line md:order-first">
+      <img src="public/supplements.jpg" alt="Glass cabinet of whey protein, creatine and amino supplements" width="700" height="933" loading="lazy" class="w-full aspect-[3/4] object-cover object-top border border-line md:order-first">
       <div>
         <h2 class="h2">Supplements on the shelf</h2>
         <p class="lead">Buy at the counter after your workout. We stock whey protein, mass gainers, creatine, amino acids and pre-workout, plus single-serve sachets if you want to try before you buy a tub.</p>
@@ -182,10 +189,70 @@
 
 <footer class="py-7 text-mute text-[.9rem] border-t border-line">
   <div class="max-w-[1120px] mx-auto px-5 flex flex-wrap gap-3 justify-between items-center">
-    <img src="images/logo.jpg" alt="" width="56" height="56" loading="lazy" class="w-14 h-14 object-cover">
+    <img src="public/logo.jpg" alt="" width="56" height="56" loading="lazy" class="w-14 h-14 object-cover">
     <span>© <span id="yr">2026</span> ZNZ Fitness Gym, Talisay City, Cebu</span>
   </div>
 </footer>
+<script>
+(function () {
+  var v = document.getElementById('hero-video');
+  var b = document.getElementById('hero-sound');
+  var label = document.getElementById('hero-label');
+  var waves = document.getElementById('hero-waves');
+  var cross = document.getElementById('hero-cross');
+  var userMuted = false;
+
+  function render() {
+    label.textContent = v.muted ? 'Unmute' : 'Mute';
+    b.setAttribute('aria-pressed', String(!v.muted));
+    waves.style.display = v.muted ? 'none' : '';
+    cross.style.display = v.muted ? '' : 'none';
+  }
+
+  // Start with sound. If the browser blocks that, fall back to muted autoplay.
+  function start() {
+    v.muted = userMuted;
+    var p = v.play();
+    if (p && p.catch) {
+      p.then(render).catch(function () {
+        v.muted = true;
+        var q = v.play();
+        if (q && q.catch) q.catch(function () {});
+        render();
+      });
+    }
+  }
+
+  b.addEventListener('click', function () {
+    v.muted = !v.muted;
+    userMuted = v.muted;
+    render();
+  });
+
+  // The first tap, click or key press anywhere turns sound on (unless the visitor muted it).
+  function unlock(e) {
+    if (b.contains(e.target)) return;
+    if (!userMuted && v.muted) { v.muted = false; render(); }
+    ['pointerdown', 'keydown', 'touchend'].forEach(function (t) { document.removeEventListener(t, unlock); });
+  }
+  ['pointerdown', 'keydown', 'touchend'].forEach(function (t) { document.addEventListener(t, unlock, { passive: true }); });
+
+  render();
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    v.controls = true;          // visitors who prefer less motion press play themselves
+    b.style.display = 'none';
+    return;
+  }
+
+  // Play while the video is on screen, pause when scrolled away so sound never plays unseen.
+  new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { if (v.paused) start(); } else { v.pause(); }
+    });
+  }, { threshold: 0.4 }).observe(v);
+})();
+</script>
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
 </body>
 </html>
